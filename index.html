@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>팔로그램 - 인스타그램 마케팅 솔루션</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+      background: #fafafa;
+      color: #262626;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: #fff;
+      border-bottom: 1px solid #dbdbdb;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-size: 22px;
+      font-weight: 700;
+      background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      cursor: pointer;
+    }
+    nav a {
+      text-decoration: none;
+      color: #262626;
+      font-size: 14px;
+      font-weight: 600;
+      margin-left: 24px;
+      cursor: pointer;
+    }
+    nav a:hover { color: #e1306c; }
+
+    /* ── SCREENS ── */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+      color: #fff;
+      text-align: center;
+      padding: 80px 20px 90px;
+    }
+    .hero h1 { font-size: 36px; font-weight: 800; line-height: 1.3; }
+    .hero p { margin-top: 14px; font-size: 16px; opacity: .88; }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,.2);
+      border: 1px solid rgba(255,255,255,.5);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      background: #fff;
+      border-bottom: 1px solid #efefef;
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      padding: 22px 20px;
+      flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat strong { display: block; font-size: 24px; font-weight: 800; color: #e1306c; }
+    .stat span { font-size: 12px; color: #8e8e8e; margin-top: 2px; display: block; }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+      text-align: center;
+      padding: 50px 20px 10px;
+    }
+    .section-title h2 { font-size: 22px; font-weight: 700; }
+    .section-title p { font-size: 14px; color: #8e8e8e; margin-top: 6px; }
+
+    /* ── SERVICE GRID ── */
+    .service-grid {
+      max-width: 1000px;
+      margin: 30px auto 60px;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 18px;
+    }
+    .service-card {
+      background: #fff;
+      border: 1px solid #efefef;
+      border-radius: 16px;
+      padding: 28px 22px;
+      cursor: pointer;
+      transition: box-shadow .2s, transform .15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,.1);
+      transform: translateY(-3px);
+    }
+    .service-card .badge {
+      position: absolute;
+      top: 14px; right: 14px;
+      background: #e1306c;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 10px;
+    }
+    .service-card .icon { font-size: 36px; margin-bottom: 14px; }
+    .service-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .service-card p { font-size: 13px; color: #8e8e8e; line-height: 1.5; }
+    .service-card .price {
+      margin-top: 16px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #e1306c;
+    }
+
+    /* ── PURCHASE SCREEN ── */
+    .purchase-wrap {
+      max-width: 560px;
+      margin: 40px auto 80px;
+      padding: 0 20px;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      color: #8e8e8e;
+      cursor: pointer;
+      margin-bottom: 24px;
+    }
+    .back-btn:hover { color: #262626; }
+    .purchase-card {
+      background: #fff;
+      border: 1px solid #efefef;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    }
+    .purchase-header {
+      background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+      color: #fff;
+      padding: 28px 28px 24px;
+    }
+    .purchase-header h2 { font-size: 20px; font-weight: 700; }
+    .purchase-header p { font-size: 13px; opacity: .85; margin-top: 4px; }
+    .purchase-body { padding: 28px; }
+
+    .plan-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+    .plan-item {
+      border: 2px solid #efefef;
+      border-radius: 12px;
+      padding: 16px 18px;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .plan-item:hover { border-color: #c13584; background: #fdf0f5; }
+    .plan-item.selected { border-color: #e1306c; background: #fff0f4; }
+    .plan-item .plan-name { font-size: 15px; font-weight: 600; }
+    .plan-item .plan-sub { font-size: 12px; color: #8e8e8e; margin-top: 3px; }
+    .plan-item .plan-price { font-size: 17px; font-weight: 800; color: #e1306c; }
+
+    .id-input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #dbdbdb;
+      border-radius: 10px;
+      font-size: 14px;
+      margin-bottom: 20px;
+      outline: none;
+      transition: border-color .15s;
+    }
+    .id-input:focus { border-color: #c13584; }
+
+    .pay-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(90deg, #833ab4, #fd1d1d, #fcb045);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity .15s, transform .1s;
+    }
+    .pay-btn:hover { opacity: .92; transform: scale(1.01); }
+    .pay-btn:active { transform: scale(.98); }
+
+    .trust-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+    .trust-item { font-size: 12px; color: #8e8e8e; display: flex; align-items: center; gap: 4px; }
+
+    /* ── COMPLETE SCREEN ── */
+    .complete-wrap {
+      max-width: 480px;
+      margin: 80px auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+    .complete-card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 50px 36px 44px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.08);
+      border: 1px solid #efefef;
+    }
+    .checkmark-circle {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #833ab4, #e1306c);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 36px;
+    }
+    .complete-card h2 { font-size: 26px; font-weight: 800; margin-bottom: 10px; }
+    .complete-card .sub { font-size: 15px; color: #8e8e8e; line-height: 1.6; }
+    .complete-detail {
+      background: #fafafa;
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin: 24px 0;
+      text-align: left;
+    }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      padding: 6px 0;
+    }
+    .detail-row span:first-child { color: #8e8e8e; }
+    .detail-row span:last-child { font-weight: 600; }
+    .detail-divider { border: none; border-top: 1px solid #efefef; margin: 8px 0; }
+    .complete-notice {
+      font-size: 13px;
+      color: #8e8e8e;
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+    .home-btn {
+      width: 100%;
+      padding: 15px;
+      background: #262626;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .home-btn:hover { background: #000; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #fff;
+      border-top: 1px solid #efefef;
+      text-align: center;
+      padding: 28px 20px;
+      font-size: 12px;
+      color: #c7c7c7;
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 26px; }
+      .stats-bar { gap: 30px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ────────────── HEADER ────────────── -->
+<header>
+  <div class="header-inner">
+    <div class="logo" onclick="goHome()">📸 팔로그램</div>
+    <nav>
+      <a onclick="goHome()">서비스</a>
+      <a onclick="goHome()">후기</a>
+      <a onclick="goHome()">고객센터</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ────────────── HOME SCREEN ────────────── -->
+<div id="screen-home" class="screen active">
+  <div class="hero">
+    <div class="hero-badge">✅ 국내 1위 인스타그램 마케팅</div>
+    <h1>진짜 팔로워로<br>인스타 계정을 키우세요</h1>
+    <p>빠른 처리 · 안전한 결제 · 24시간 고객 지원</p>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat"><strong>120만+</strong><span>누적 주문</span></div>
+    <div class="stat"><strong>98.7%</strong><span>고객 만족도</span></div>
+    <div class="stat"><strong>5분↓</strong><span>평균 처리 시간</span></div>
+    <div class="stat"><strong>24/7</strong><span>고객 지원</span></div>
+  </div>
+
+  <div class="section-title">
+    <h2>서비스 선택</h2>
+    <p>원하는 서비스를 선택하고 바로 시작하세요</p>
+  </div>
+
+  <div class="service-grid">
+    <div class="service-card" onclick="goPurchase('내국인 팔로워', '🇰🇷', '국내 실계정 팔로워')">
+      <span class="badge">인기</span>
+      <div class="icon">🇰🇷</div>
+      <h3>내국인 팔로워</h3>
+      <p>실제 한국인 계정 팔로워로 신뢰도 UP</p>
+      <div class="price">₩ 6,000 ~</div>
+    </div>
+    <div class="service-card" onclick="goPurchase('외국인 팔로워', '🌍', '글로벌 실계정 팔로워')">
+      <div class="icon">🌍</div>
+      <h3>외국인 팔로워</h3>
+      <p>글로벌 팔로워로 월드와이드 계정으로</p>
+      <div class="price">₩ 4,000 ~</div>
+    </div>
+    <div class="service-card" onclick="goPurchase('좋아요', '❤️', '게시물 좋아요')">
+      <span class="badge">빠름</span>
+      <div class="icon">❤️</div>
+      <h3>좋아요</h3>
+      <p>게시물 좋아요 수를 빠르게 올려보세요</p>
+      <div class="price">₩ 900 ~</div>
+    </div>
+    <div class="service-card" onclick="goPurchase('조회수', '▶️', '릴스·동영상 조회수')">
+      <div class="icon">▶️</div>
+      <h3>조회수</h3>
+      <p>릴스 및 동영상 조회수 즉시 증가</p>
+      <div class="price">₩ 500 ~</div>
+    </div>
+    <div class="service-card" onclick="goPurchase('댓글', '💬', '게시물 댓글')">
+      <div class="icon">💬</div>
+      <h3>댓글</h3>
+      <p>자연스러운 한국어 댓글로 반응 높이기</p>
+      <div class="price">₩ 2,000 ~</div>
+    </div>
+    <div class="service-card" onclick="goPurchase('스토리 조회', '👁️', '스토리 조회수')">
+      <div class="icon">👁️</div>
+      <h3>스토리 조회</h3>
+      <p>스토리 조회수를 폭발적으로 늘려보세요</p>
+      <div class="price">₩ 1,200 ~</div>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────── PURCHASE SCREEN ────────────── -->
+<div id="screen-purchase" class="screen">
+  <div class="purchase-wrap">
+    <div class="back-btn" onclick="goHome()">← 서비스 목록으로</div>
+    <div class="purchase-card">
+      <div class="purchase-header">
+        <h2 id="purchase-title">내국인 팔로워 구매</h2>
+        <p id="purchase-sub">원하는 수량을 선택하고 결제하세요</p>
+      </div>
+      <div class="purchase-body">
+        <div class="plan-list" id="plan-list"></div>
+
+        <input
+          class="id-input"
+          id="instagram-id"
+          type="text"
+          placeholder="인스타그램 아이디 입력 (예: @username)"
+        />
+
+        <button class="pay-btn" onclick="goPay()">💳 결제하기</button>
+
+        <div class="trust-row">
+          <span class="trust-item">🔒 안전결제</span>
+          <span class="trust-item">⚡ 즉시처리</span>
+          <span class="trust-item">💯 환불보장</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────── COMPLETE SCREEN ────────────── -->
+<div id="screen-complete" class="screen">
+  <div class="complete-wrap">
+    <div class="complete-card">
+      <div class="checkmark-circle">✓</div>
+      <h2>결제 완료!</h2>
+      <p class="sub">주문이 성공적으로 접수되었습니다.<br>잠시 후 처리가 시작됩니다.</p>
+
+      <div class="complete-detail">
+        <div class="detail-row">
+          <span>서비스</span>
+          <span id="res-service">—</span>
+        </div>
+        <div class="detail-row">
+          <span>수량</span>
+          <span id="res-qty">—</span>
+        </div>
+        <div class="detail-row">
+          <span>인스타 아이디</span>
+          <span id="res-id">—</span>
+        </div>
+        <hr class="detail-divider" />
+        <div class="detail-row">
+          <span>결제 금액</span>
+          <span id="res-price" style="color:#e1306c;">—</span>
+        </div>
+        <div class="detail-row">
+          <span>결제 시각</span>
+          <span id="res-time">—</span>
+        </div>
+        <div class="detail-row">
+          <span>주문 번호</span>
+          <span id="res-order">—</span>
+        </div>
+      </div>
+
+      <p class="complete-notice">
+        처리 시작까지 <strong>평균 5분</strong> 소요됩니다.<br>
+        문의사항은 카카오톡 채널 <strong>@팔로그램</strong>으로 연락주세요.
+      </p>
+
+      <button class="home-btn" onclick="goHome()">홈으로 돌아가기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────── FOOTER ────────────── -->
+<footer>
+  © 2025 팔로그램 · 이용약관 · 개인정보처리방침 · 고객센터
+</footer>
+
+<script>
+  const plans = {
+    '내국인 팔로워': [
+      { name: '10명', price: '6,000원', raw: 6000 },
+      { name: '100명', price: '60,000원', raw: 60000 },
+      { name: '500명', price: '300,000원', raw: 300000 },
+      { name: '1,000명', price: '600,000원', raw: 600000 },
+      { name: '5,000명', price: '3,000,000원', raw: 3000000 },
+    ],
+    '외국인 팔로워': [
+      { name: '10명', price: '4,000원', raw: 4000 },
+      { name: '100명', price: '40,000원', raw: 40000 },
+      { name: '500명', price: '200,000원', raw: 200000 },
+      { name: '1,000명', price: '400,000원', raw: 400000 },
+      { name: '5,000명', price: '2,000,000원', raw: 2000000 },
+    ],
+    '좋아요': [
+      { name: '50개', price: '900원', raw: 900 },
+      { name: '200개', price: '2,900원', raw: 2900 },
+      { name: '500개', price: '5,900원', raw: 5900 },
+      { name: '1,000개', price: '9,900원', raw: 9900 },
+    ],
+    '조회수': [
+      { name: '1,000회', price: '500원', raw: 500 },
+      { name: '5,000회', price: '1,900원', raw: 1900 },
+      { name: '10,000회', price: '3,200원', raw: 3200 },
+      { name: '50,000회', price: '12,000원', raw: 12000 },
+    ],
+    '댓글': [
+      { name: '10개', price: '2,000원', raw: 2000 },
+      { name: '30개', price: '5,500원', raw: 5500 },
+      { name: '50개', price: '8,500원', raw: 8500 },
+      { name: '100개', price: '15,000원', raw: 15000 },
+    ],
+    '스토리 조회': [
+      { name: '500회', price: '1,200원', raw: 1200 },
+      { name: '1,000회', price: '2,000원', raw: 2000 },
+      { name: '5,000회', price: '7,900원', raw: 7900 },
+      { name: '10,000회', price: '13,000원', raw: 13000 },
+    ],
+  };
+
+  let currentService = '';
+  let selectedPlan = null;
+
+  function show(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function goHome() { show('screen-home'); }
+
+  function goPurchase(service, icon, sub) {
+    currentService = service;
+    selectedPlan = null;
+    document.getElementById('purchase-title').textContent = icon + ' ' + service + ' 구매';
+    document.getElementById('purchase-sub').textContent = sub + ' — 수량을 선택하고 결제하세요';
+    document.getElementById('instagram-id').value = '';
+
+    const list = document.getElementById('plan-list');
+    list.innerHTML = '';
+    (plans[service] || []).forEach((p, i) => {
+      const el = document.createElement('div');
+      el.className = 'plan-item' + (i === 0 ? ' selected' : '');
+      el.innerHTML = `
+        <div>
+          <div class="plan-name">${p.name}</div>
+          <div class="plan-sub">즉시 처리 · 안전 보장</div>
+        </div>
+        <div class="plan-price">${p.price}</div>`;
+      el.addEventListener('click', () => {
+        document.querySelectorAll('.plan-item').forEach(x => x.classList.remove('selected'));
+        el.classList.add('selected');
+        selectedPlan = p;
+      });
+      list.appendChild(el);
+      if (i === 0) selectedPlan = p;
+    });
+
+    show('screen-purchase');
+  }
+
+  function goPay() {
+    const id = document.getElementById('instagram-id').value.trim();
+    if (!id) {
+      alert('인스타그램 아이디를 입력해주세요.');
+      document.getElementById('instagram-id').focus();
+      return;
+    }
+    if (!selectedPlan) {
+      alert('수량 플랜을 선택해주세요.');
+      return;
+    }
+
+    const now = new Date();
+    const timeStr = now.toLocaleString('ko-KR', {
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit'
+    });
+    const orderNo = 'PG-' + Date.now().toString().slice(-8);
+
+    document.getElementById('res-service').textContent = currentService;
+    document.getElementById('res-qty').textContent = selectedPlan.name;
+    document.getElementById('res-id').textContent = id.startsWith('@') ? id : '@' + id;
+    document.getElementById('res-price').textContent = selectedPlan.price;
+    document.getElementById('res-time').textContent = timeStr;
+    document.getElementById('res-order').textContent = orderNo;
+
+    show('screen-complete');
+  }
+</script>
+</body>
+</html>
